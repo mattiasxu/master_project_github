@@ -25,7 +25,7 @@ The lower dimensioned top encoding takes care of more general and global feature
 
 ### PixelSNAIL
 #### Top PixelSNAIL
-Example showing ancestral sampling conditioned on 8 frames. 8 new frames are generated.
+Example showing ancestral sampling conditioned on 8 frames. 8 new frames are generated. Left is decoded from original encoding, middle is decoded from the generated top encoding and right is encoded from the generated top encoding and the bottom encoding (not generated!)
 
 <p float="left">
   <img src="./examples/pixelsnail/top_snail/50msyncedd.gif" width="900" />
