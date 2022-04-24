@@ -23,4 +23,10 @@ The lower dimensioned top encoding takes care of more general and global feature
   <img src="./examples/input_top_bot_separate/synced.gif" width="900" />
 </p>
 
+### PixelSNAIL
+#### Top PixelSNAIL
+Example showing ancestral sampling conditioned on 8 frames. 8 new frames are generated.
 
+<p float="left">
+  <img src="./examples/pixelsnail/top_snail/50msynced.gif" width="900" />
+</p>
