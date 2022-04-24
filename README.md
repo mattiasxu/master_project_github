@@ -28,5 +28,5 @@ The lower dimensioned top encoding takes care of more general and global feature
 Example showing ancestral sampling conditioned on 8 frames. 8 new frames are generated.
 
 <p float="left">
-  <img src="./examples/pixelsnail/top_snail/50msynced.gif" width="900" />
+  <img src="./examples/pixelsnail/top_snail/50msyncedd.gif" width="900" />
 </p>
