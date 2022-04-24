@@ -3,6 +3,8 @@
 ## Implementations
 Implementations of VQVAE and PixelSNAIL found in models directory.
 
+lit_x.py models are models ported to PyTorch Lightning modules for training etc.
+
 VQVAE: Hierarchical Quantized Autoencoders [https://arxiv.org/abs/2002.08111]
 
 PixelSNAIL: An Improved Autoregressive Generative Model [https://arxiv.org/abs/1712.09763]
