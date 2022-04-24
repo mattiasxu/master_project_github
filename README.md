@@ -15,7 +15,7 @@ Assuming 8-bit color channels, 3x16x256x256x8 is encoded into 4x32x32 + 8x32x32,
   <img src="./examples/vqvae_reconstructions/4.gif" width="450" /> 
 </p>
 
-The lower dimensioned top encoding takes care of more general and global features, like coloring. The higher dimensioned bottom encoding takes care of more detailed features. Left is input, middle is top encoding and right is bottom encoding.
+The lower dimensioned top encoding takes care of more general and global features, like coloring. The higher dimensioned bottom encoding takes care of more detailed features. Here, the input (left) is decoded first using only the top encoding (middle), then by the bottom encoding (right).
 
 <p float="left">
   <img src="./examples/input_top_bot_separate/synced.gif" width="900" />
