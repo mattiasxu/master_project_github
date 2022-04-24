@@ -21,7 +21,4 @@ The lower dimensioned top encoding takes care of more general and global feature
   <img src="./examples/input_top_bot_separate/synced.gif" width="900" />
 </p>
 
-<figure>
-  <img src="./examples/input_top_bot_separate/synced.gif" width="900" />
-  <figcaption align="center"><b>Left: Input Middle: Top Encoding Only Right: Bottom Encoding Only</b></figcaption>
-</figure>
+
