@@ -21,6 +21,7 @@ The lower dimensioned top encoding takes care of more general and global feature
   <img src="./examples/input_top_bot_separate/synced.gif" width="900" />
 </p>
 
-| ![space-1.jpg](./examples/input_top_bot_separate/synced.gif) |
-|:--:|
-| <b>Image Credits - Fig.2 - 4K Mountains Wallpaper</b>|
+<figure>
+  <img src="./examples/input_top_bot_separate/synced.gif" width="900" />
+  <figcaption align = "center"><b>Fig.1 - 4K Mountains Wallpaper</b></figcaption>
+</figure>
