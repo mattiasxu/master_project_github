@@ -1,5 +1,8 @@
 # Code and examples for Master Thesis
 
+## Missing:
+### Training bottom PixelSNAIL
+
 ## Implementations
 Implementations of VQVAE and PixelSNAIL found in models directory.
 
