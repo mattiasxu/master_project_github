@@ -43,3 +43,8 @@ Example showing ancestral sampling conditioned on 8 frames. 8 new frames are gen
 <p float="left">
   <img src="./examples/pixelsnail/top_snail/50msyncedd.gif" width="900" />
 </p>
+
+This example shows a converged 34M parameter model, compared to the 50M parameters above. Here, the generated frames are simply static frames equal to the last conditioning frame.
+<p float="left">
+  <img src="./examples/pixelsnail/top_snail/recon_top34M.gif" width="900" />
+</p>
