@@ -1,2 +1,3 @@
-# master_project_github
-Code and examples for Master thesis
+# Code and examples for Master Thesis
+
+
