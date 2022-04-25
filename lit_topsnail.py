@@ -8,7 +8,6 @@ class TopSNAIL(pl.LightningModule):
     def __init__(self, params):
         super().__init__()
 
-        print(params.input_channels)
         self.model = PixelSNAIL(
                 attention=True,
                 input_channels=params.input_channels,
@@ -39,7 +38,6 @@ class TopSNAIL(pl.LightningModule):
     def find_loss(self, batch, idx):
         x = batch[0]
         y = torch.argmax(x, dim=1)
-        print(x.shape)
         x_hat = self.forward(x)
         loss = self.criterion(x_hat, y)
         return loss
