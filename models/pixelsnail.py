@@ -3,12 +3,10 @@ import numpy as np
 import torch
 from torch import nn
 from torch.nn import functional as F
-from models.pixelsnail_2d import PixelSNAIL2D
-from einops import rearrange
 import pytorch_lightning as pl
 
 
-# [1] PixelSNAIL: https://arxiv.org/pdf/1712.09763.pdf
+# [1] PixelSNAIL adjusted to 3D: https://arxiv.org/pdf/1712.09763.pdf
 
 def elu_conv_elu(conv, x):
     """ELU -> conv -> ELU
@@ -103,16 +101,21 @@ class ResidualBlock(nn.Module):
     valuable. This also keeps input dim same as output dim.
     """
 
-    def __init__(self, n_channels, attention=True):
+    def __init__(self, n_channels, attention=True, causal=True):
         super().__init__()
         if attention:
             self.input_conv = nn.Conv3d(in_channels=n_channels, out_channels=n_channels, kernel_size=2, padding=1)
             self.output_conv = nn.Conv3d(in_channels=n_channels, out_channels=2 * n_channels, kernel_size=2, padding=1)
-        else:
+        elif causal:
             self.input_conv = CausalConv3d(mask_center=False, in_channels=n_channels, out_channels=n_channels,
                                            kernel_size=(3, 7, 7), padding=(1, 3, 3))
             self.output_conv = CausalConv3d(mask_center=False, in_channels=n_channels, out_channels=2 * n_channels,
                                             kernel_size=(3, 7, 7), padding=(1, 3, 3))
+        else:
+            self.input_conv = nn.Conv3d(in_channels=n_channels, out_channels=n_channels, kernel_size=(3, 7, 7),
+                                        padding=(1, 3, 3))
+            self.output_conv = nn.Conv3d(in_channels=n_channels, out_channels=2 * n_channels, kernel_size=(3, 7, 7),
+                                        padding=(1, 3, 3))
 
         self.activation = GatedActivation(activation_fn=nn.Identity())
 
@@ -197,7 +200,7 @@ class PixelSNAIL(nn.Module):
     """The PixelSNAIL [1] model"""
 
     def __init__(self, attention, input_channels, n_codes, n_filters, n_res_blocks, n_snail_blocks, key_channels=None,
-                 value_channels=None):
+                 value_channels=None, condition=False, n_res_condition=None):
         super().__init__()
         self.in_conv = CausalConv3d(mask_center=True, in_channels=input_channels,
                                     out_channels=n_filters, kernel_size=2, padding=1)
@@ -210,11 +213,31 @@ class PixelSNAIL(nn.Module):
                             attention=attention) for _ in range(n_snail_blocks)])
         self.out = nn.Conv3d(in_channels=n_filters, out_channels=n_codes, kernel_size=1)
         self.n_codes = n_codes
+        self.condition = condition
 
-    def forward(self, x):
+        if condition:
+            self.upsample_top = nn.Sequential(
+                nn.ConvTranspose3d(in_channels=n_codes, out_channels=128, kernel_size=(4, 3, 3), stride=(2,1,1), padding=1),
+                nn.ELU(),
+                nn.ConvTranspose3d(in_channels=128, out_channels=128, kernel_size=(3, 4, 4), stride=(1,2,2), padding=1),
+                nn.ELU(),
+                nn.ConvTranspose3d(in_channels=128, out_channels=128, kernel_size=(3, 3, 3), stride=(1,1,1), padding=1),
+            )
+            self.condition_residual = nn.Sequential(
+                *[ResidualBlock(n_channels=128, attention=False, causal=False) for _ in range(n_res_condition)]
+            )
+            self.final_condition = nn.Conv3d(in_channels=128, out_channels=n_filters, kernel_size=1)
+
+    def forward(self, x, cond=None):
         _, _, t, h, w = x.shape
+
+        if self.condition:
+            top_condition = self.upsample_top(cond)
+            top_condition = self.condition_residual(top_condition)
+            top_condition = self.final_condition(top_condition)
+
         x = self.in_conv(x)[:, :, :t, :h, :w]
-        original_input = x
+        original_input = x + (self.condition and top_condition)
         for block in self.pixel_snail_blocks:
             x = x + block(x, original_input)
         return F.log_softmax(self.out(x), dim=1)
@@ -238,7 +261,7 @@ class PixelSNAIL(nn.Module):
                     ancestral_sample[:, :, i, j, k] = next_code
         return ancestral_sample
 
-""" WORK IN PROGRESS
+"""
 class HierarchicalPixelSNAIL(pl.LightningModule):
 
     def __init__(self, n_codes, n_filters, n_res_blocks, n_snail_blocks, n_condition_blocks, key_channels,
@@ -283,43 +306,36 @@ class HierarchicalPixelSNAIL(pl.LightningModule):
         bot_code = rearrange(bot_code, '(b t) c h w -> b c t h w', b=b, t=t)
         
         return top_code, bot_code
-
-    def configure_optimizers(self):
-        optimizer = torch.optim.Adam(self.parameters(), lr=1e-4)
-        return optimizer
-
-    def training_step(self, train_batch, batch_idx):
-        in_top, in_bottom = train_batch
-        out_top, out_bottom = self.forward(in_top, in_bottom)
-        top_loss = self.criterion(out_top, torch.argmax(in_top, dim=1))
-        bottom_loss = self.criterion(out_bottom, torch.argmax(in_bottom, dim=1))
-        loss = top_loss + bottom_loss
-        self.log('train_loss', loss)
-        return loss
-
-    def validation_step(self, val_batch, batch_idx):
-        in_top, in_bottom = val_batch
-        out_top, out_bottom = self.forward((in_top, in_bottom))
-        top_loss = self.criterion(out_top, in_top)
-        bottom_loss = self.criterion(out_bottom, in_bottom)
-        loss = top_loss + bottom_loss
-        self.log('val_loss', loss)
 """
 
 if __name__ == "__main__":
     # Testing stuff here
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
-    print(device)
     device = torch.device("cpu")
-    # test = PixelSNAIL(True, 512*2, 512, 64, 4, 16, 32, 5)
-    # inp = torch.ones((1,512*2,4,32,32))
-    # inp[:, :, 2, 3, 2] = 100000000
-    # print(test(inp).shape)
 
+    """
+    model = PixelSNAIL(attention=False,
+                       input_channels=512,
+                       n_codes=512,
+                       n_filters=256,
+                       n_res_blocks=1,
+                       n_snail_blocks=3,
+                       condition=True,
+                       n_res_condition=20)
+    """
+
+    model = PixelSNAIL(attention=True,
+    input_channels=512,
+    n_codes=512,
+    n_filters=256,
+    n_res_blocks=1,
+    n_snail_blocks=3,
+    key_channels=16,
+    value_channels=128)
+
+    model.to(device)
+    model.eval()
     top = torch.ones((1, 512, 4, 32, 32)).to(device)
     bot = torch.ones((1, 512, 8, 64, 64)).to(device)
     print(bot.type())
-    final = HierarchicalPixelSNAIL(n_codes=512, n_filters=8, n_res_blocks=1, n_snail_blocks=1, n_condition_blocks=1,
-                                   key_channels=16, value_channels=128).to(device)
-    final.eval()
-    final(top, bot)
+    model(bot)

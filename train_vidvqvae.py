@@ -31,7 +31,7 @@ def main(config):
         logger=wandb_logger,
         max_epochs=config.epochs
     )
-    trainer.validate(vidvqvae, driving_data)
+    trainer.fit(vidvqvae, driving_data)
 
 if __name__ == "__main__":
     main(config)

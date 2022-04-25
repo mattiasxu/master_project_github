@@ -24,13 +24,12 @@ config = wandb.config
 def main(config):
     topsnail = TopSNAIL(config)
     latent_data = LatentDataModule(config)
-    # wandb_logger = WandbLogger()
-    # wandb_logger.watch(topsnail)
+    wandb_logger = WandbLogger()
+    wandb_logger.watch(topsnail)
 
     trainer = pl.Trainer(
             gpus=1,
             max_epochs=config.epochs,
-            fast_dev_run=True,
             )
     trainer.fit(topsnail, latent_data)
 
