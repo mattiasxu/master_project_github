@@ -50,8 +50,14 @@ This example shows a converged 34M parameter model, compared to the 50M paramete
 #### Bottom PixelSNAIL
 
 <p float="left">
-  <img src="./examples/recon102/recon_bot102.gif" width="300" />
-  <img src="./examples/recon53/recon_bot53.gif" width="300" />
+  <img src="./examples/recon102/recon_bot102.gif" width="250" />
+  <img src="./examples/recon53/recon_bot53.gif" width="250" />
+  <img src="./examples/recon98/recon_bot98.gif" width="250" />
 </p>
 
 #### Hierarchical PixelSNAIL
+<p float="left">
+  <img src="./examples/recon102/recon102.gif" width="250" />
+  <img src="./examples/recon53/recon53.gif" width="250" />
+  <img src="./examples/recon98/recon98.gif" width="250" />
+</p>
