@@ -41,12 +41,17 @@ Example showing ancestral sampling conditioned on 8 frames. 8 new frames are gen
   <img src="./examples/pixelsnail/top_snail/50msyncedd.gif" width="900" />
 </p>
 
-This example shows a converged 34M parameter model, compared to the 50M parameters above. Here, the generated frames looks very static, and is similar to the last conditioning frame.
+This example shows a converged 34M parameter model, compared to the 50M parameters above. Here, the generated frames look very static, and are similar to the last conditioning frame.
 <p float="left">
   <img src="./examples/pixelsnail/top_snail/top_only34M.gif" width="300" />
   <img src="./examples/pixelsnail/top_snail/recon_top34M.gif" width="300" />
 </p>
 
 #### Bottom PixelSNAIL
+
+<p float="left">
+  <img src="./examples/recon102/recon_bot102.gif" width="300" />
+  <img src="./examples/recon53/recon_bot53.gif" width="300" />
+</p>
 
 #### Hierarchical PixelSNAIL
