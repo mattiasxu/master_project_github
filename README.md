@@ -1,8 +1,5 @@
 # Code and examples for Master Thesis
 
-## Missing:
-### Training bottom PixelSNAIL
-
 ## Implementations
 Implementations of VQVAE and PixelSNAIL found in models directory.
 
@@ -49,3 +46,7 @@ This example shows a converged 34M parameter model, compared to the 50M paramete
   <img src="./examples/pixelsnail/top_snail/top_only34M.gif" width="300" />
   <img src="./examples/pixelsnail/top_snail/recon_top34M.gif" width="300" />
 </p>
+
+#### Bottom PixelSNAIL
+
+#### Hierarchical PixelSNAIL

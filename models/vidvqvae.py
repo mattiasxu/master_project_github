@@ -65,7 +65,7 @@ class Quantizer(nn.Module):
 
 class ResBlock(nn.Module):
     """Residual Block
-    
+
     Args:
         in_channel: input and output channels of resblock
         channel: intermediate channel count
@@ -75,7 +75,7 @@ class ResBlock(nn.Module):
 
         self.conv = nn.Sequential(
             nn.ReLU(),
-            nn.Conv3d(in_channel, channel, 3, padding=1),
+            nn.Conv3d(in_channel, channel, (1, 3, 3), padding=(0, 1, 1)),
             nn.ReLU(inplace=True),
             nn.Conv3d(channel, in_channel, 1),
         )
@@ -89,7 +89,7 @@ class ResBlock(nn.Module):
 
 class Encoder(nn.Module):
     """VQVAE Encoder
-    
+
     args:
         in_channel: number of input channels
         channel: intermediate channel count
