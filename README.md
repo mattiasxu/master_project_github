@@ -48,14 +48,20 @@ This example shows a converged 34M parameter model, compared to the 50M paramete
 </p>
 
 #### Bottom PixelSNAIL
-
+Generated bottom encodings conditioned on generated top encodings. 
 <p float="left">
   <img src="./examples/recon102/recon_bot102.gif" width="250" />
   <img src="./examples/recon53/recon_bot53.gif" width="250" />
   <img src="./examples/recon98/recon_bot98.gif" width="250" />
 </p>
-
+No visible differences between condition on generated top encodings and matching encodings. Examples below show generated bottom encodings conditioned and decoded with the matching top encoding.
+<p float="left">
+  <img src="./examples/recon102/recon_bot102perf.gif" width="250" />
+  <img src="./examples/recon53/recon_bot53perf.gif" width="250" />
+  <img src="./examples/recon98/recon_bot98perf.gif" width="250" />
+</p>
 #### Hierarchical PixelSNAIL
+Examples from the Hierarchical PixelSNAIL.
 <p float="left">
   <img src="./examples/recon102/recon102.gif" width="250" />
   <img src="./examples/recon53/recon53.gif" width="250" />
