@@ -60,7 +60,9 @@ No visible differences between condition on generated top encodings and matching
   <img src="./examples/recon53/recon_bot53perf.gif" width="250" />
   <img src="./examples/recon98/recon_bot98perf.gif" width="250" />
 </p>
+
 #### Hierarchical PixelSNAIL
+
 Examples from the Hierarchical PixelSNAIL.
 <p float="left">
   <img src="./examples/recon102/recon102.gif" width="250" />
